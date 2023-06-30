@@ -1,0 +1,263 @@
+[
+    {
+        "id": "9926ca58a24bb7a8",
+        "type": "tab",
+        "label": "Flow 3",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "0ca5bf77d6e46448",
+        "type": "ibmiot in",
+        "z": "9926ca58a24bb7a8",
+        "authentication": "apiKey",
+        "apiKey": "060ea9e0742cb77a",
+        "inputType": "evt",
+        "logicalInterface": "",
+        "ruleId": "",
+        "deviceId": "",
+        "applicationId": "",
+        "deviceType": "+",
+        "eventType": "+",
+        "commandType": "",
+        "format": "json",
+        "name": "IBM IoT",
+        "service": "registered",
+        "allDevices": "",
+        "allApplications": "",
+        "allDeviceTypes": true,
+        "allLogicalInterfaces": "",
+        "allEvents": true,
+        "allCommands": "",
+        "allFormats": "",
+        "qos": 0,
+        "x": 170,
+        "y": 160,
+        "wires": [
+            [
+                "7092a8e2c8b1d3fa"
+            ]
+        ]
+    },
+    {
+        "id": "bc95131db50c1941",
+        "type": "ibmiot out",
+        "z": "9926ca58a24bb7a8",
+        "authentication": "apiKey",
+        "apiKey": "060ea9e0742cb77a",
+        "outputType": "evt",
+        "deviceId": "1234",
+        "deviceType": "Demo_Device",
+        "eventCommandType": "command",
+        "format": "String",
+        "data": "Data",
+        "qos": 0,
+        "name": "IBM IoT",
+        "service": "registered",
+        "x": 760,
+        "y": 460,
+        "wires": []
+    },
+    {
+        "id": "715e00d458435fb1",
+        "type": "http in",
+        "z": "9926ca58a24bb7a8",
+        "name": "",
+        "url": "/sensor",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 230,
+        "y": 340,
+        "wires": [
+            [
+                "365e3a3dfb62c491"
+            ]
+        ]
+    },
+    {
+        "id": "24b0f3ed22bce0ee",
+        "type": "debug",
+        "z": "9926ca58a24bb7a8",
+        "name": "debug 8",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 760,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "4821ad223e4ec0d8",
+        "type": "function",
+        "z": "9926ca58a24bb7a8",
+        "name": "function 9",
+        "func": "if (msg.topic == \"temp\") {\n    global.set(\"t\", msg.payload);\n    return msg;\n}\nif (msg.topic == \"humid\") {\n    global.set(\"h\", msg.payload);\n    return msg;\n}\nif(msg.topic == \"fall\") {\n    global.set(\"fall\", msg.payload);\n    return msg;\n}\nif (msg.topic == \"heart\") {\n    global.set(\"heart\", msg.payload);\n    return msg;\n}\n\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 540,
+        "y": 160,
+        "wires": [
+            [
+                "24b0f3ed22bce0ee"
+            ]
+        ]
+    },
+    {
+        "id": "365e3a3dfb62c491",
+        "type": "function",
+        "z": "9926ca58a24bb7a8",
+        "name": "function 10",
+        "func": "msg.payload = { temp: global.get(\"t\"), \n                humid: global.get(\"h\"), \n                fall: global.get(\"fall\"), \n                heart: global.get(\"heart\")}\nreturn msg;\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 490,
+        "y": 340,
+        "wires": [
+            [
+                "ddfaafb6b2144c94",
+                "1ff8d9f050a64744"
+            ]
+        ]
+    },
+    {
+        "id": "ddfaafb6b2144c94",
+        "type": "http response",
+        "z": "9926ca58a24bb7a8",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 770,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "6b4475439c3562dd",
+        "type": "http in",
+        "z": "9926ca58a24bb7a8",
+        "name": "",
+        "url": "/command",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 260,
+        "y": 460,
+        "wires": [
+            [
+                "002c92a647c70787",
+                "01519ac219573d30"
+            ]
+        ]
+    },
+    {
+        "id": "002c92a647c70787",
+        "type": "change",
+        "z": "9926ca58a24bb7a8",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "payload.command",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 500,
+        "y": 420,
+        "wires": [
+            [
+                "bc95131db50c1941",
+                "2eeddc83c97b6f65"
+            ]
+        ]
+    },
+    {
+        "id": "1ff8d9f050a64744",
+        "type": "debug",
+        "z": "9926ca58a24bb7a8",
+        "name": "debug 9",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 780,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "2eeddc83c97b6f65",
+        "type": "debug",
+        "z": "9926ca58a24bb7a8",
+        "name": "debug 10",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 740,
+        "y": 520,
+        "wires": []
+    },
+    {
+        "id": "01519ac219573d30",
+        "type": "http response",
+        "z": "9926ca58a24bb7a8",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 490,
+        "y": 500,
+        "wires": []
+    },
+    {
+        "id": "7092a8e2c8b1d3fa",
+        "type": "split",
+        "z": "9926ca58a24bb7a8",
+        "name": "",
+        "splt": ", ",
+        "spltType": "str",
+        "arraySplt": 1,
+        "arraySpltType": "len",
+        "stream": true,
+        "addname": "topic",
+        "x": 350,
+        "y": 160,
+        "wires": [
+            [
+                "4821ad223e4ec0d8"
+            ]
+        ]
+    },
+    {
+        "id": "060ea9e0742cb77a",
+        "type": "ibmiot",
+        "name": "Ibmapi",
+        "keepalive": "60",
+        "serverName": "",
+        "cleansession": true,
+        "appId": "",
+        "shared": false
+    }
+]
